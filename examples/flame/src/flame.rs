@@ -1,7 +1,7 @@
 use libm::{floorf, modff};
 use nalgebra::{clamp, SMatrix, Vector2, Vector3};
 
-type FlameCanvas = SMatrix<Vector3<u8>, 32, 32>;
+type FlameCanvas = SMatrix<Vector3<u8>, 64, 64>;
 
 fn fractf(x: f32) -> f32 {
     return modff(x).0;

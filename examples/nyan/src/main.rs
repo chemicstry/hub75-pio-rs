@@ -25,21 +25,25 @@ use hub75_pio::lut::GammaLut;
 
 use rp_pico as bsp;
 
-static mut DISPLAY_BUFFER: hub75_pio::DisplayMemory<64, 32, 12> = hub75_pio::DisplayMemory::new();
+static mut DISPLAY_BUFFER: hub75_pio::DisplayMemory<64, 64, 12> = hub75_pio::DisplayMemory::new();
 
-const FRAMES: [&[u8]; 12] = [
-    include_bytes!("../assets/01.qoi"),
-    include_bytes!("../assets/02.qoi"),
-    include_bytes!("../assets/03.qoi"),
-    include_bytes!("../assets/04.qoi"),
-    include_bytes!("../assets/05.qoi"),
-    include_bytes!("../assets/06.qoi"),
-    include_bytes!("../assets/07.qoi"),
-    include_bytes!("../assets/08.qoi"),
-    include_bytes!("../assets/09.qoi"),
-    include_bytes!("../assets/10.qoi"),
-    include_bytes!("../assets/11.qoi"),
-    include_bytes!("../assets/12.qoi"),
+// const FRAMES: [&[u8]; 12] = [
+//     include_bytes!("../assets/01.qoi"),
+//     include_bytes!("../assets/02.qoi"),
+//     include_bytes!("../assets/03.qoi"),
+//     include_bytes!("../assets/04.qoi"),
+//     include_bytes!("../assets/05.qoi"),
+//     include_bytes!("../assets/06.qoi"),
+//     include_bytes!("../assets/07.qoi"),
+//     include_bytes!("../assets/08.qoi"),
+//     include_bytes!("../assets/09.qoi"),
+//     include_bytes!("../assets/10.qoi"),
+//     include_bytes!("../assets/11.qoi"),
+//     include_bytes!("../assets/12.qoi"),
+// ];
+const FRAMES: [&[u8]; 2] = [
+    include_bytes!("../assets/pop_0.qoi"),
+    include_bytes!("../assets/pop_1.qoi"),
 ];
 
 #[entry]
@@ -88,7 +92,7 @@ fn main() -> ! {
 
     let lut = {
         let lut: GammaLut<12, _, _> = GammaLut::new();
-        lut.init((1.0, 1.0, 1.0))
+        lut.init((2.1, 2.1, 2.1))
     };
     let mut display = unsafe {
         hub75_pio::Display::new(
@@ -104,6 +108,7 @@ fn main() -> ! {
                 addrb: pins.gpio7.into_function().into_pull_type().into_dyn_pin(),
                 addrc: pins.gpio8.into_function().into_pull_type().into_dyn_pin(),
                 addrd: pins.gpio9.into_function().into_pull_type().into_dyn_pin(),
+                addre: pins.gpio10.into_function().into_pull_type().into_dyn_pin(),
                 clk: pins.gpio11.into_function().into_pull_type().into_dyn_pin(),
                 lat: pins.gpio12.into_function().into_pull_type().into_dyn_pin(),
                 oe: pins.gpio13.into_function().into_pull_type().into_dyn_pin(),
@@ -124,7 +129,7 @@ fn main() -> ! {
                 .draw(&mut display)
                 .unwrap();
             display.commit();
-            delay.delay_ms(100);
+            delay.delay_ms(150);
         }
     }
 }
